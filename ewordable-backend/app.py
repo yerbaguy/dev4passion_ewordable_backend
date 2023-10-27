@@ -9,6 +9,55 @@ app = Flask(__name__)
 def get_articles():
  return jsonify({"Hello":"World"})
 
+@app.route('/get_every_word', methods=['GET'])
+def get_every_word():
+    vid_id = "As3TT3xlddU&t=558s"
+    data = yta.get_transcript(vid_id)
+    transcript = ''
+
+    for value in data:
+        for key, val in value.items():
+            if key == 'text':
+               transcript += val
+
+    outPut = transcript.splitlines()
+    final_output = ''.join(outPut)
+
+    x:string = final_output
+
+    #for i in range(len(x)):
+    #    return (x[i:2])
+
+    blob = TextBlob(x)
+
+   #for blobb in blob.words:
+   # for word in range(len(blob.words)):
+       # return blobb.polarity
+       # return (word[0:2])
+   # return blob.words
+    #return blob.words
+    blobs = blob.parse().split()
+    #return blobs
+    
+    for blo in blobs:
+       # return blo[4]
+       
+       #correct
+       # return blo[94][0]
+        return blo[94][0].lower()
+       
+       # return blo
+
+       # for bl in blo:
+            #for b in bl:
+                #return b[0][0]
+            #return bl[0]
+            #return bl[0][2][3]
+
+
+
+
+
 @app.route('/get_better_captionss', methods = ['GET'])
 def get_better_captionss():
     vid_id = "As3TT3xlddU&t=558s"
@@ -28,6 +77,7 @@ def get_better_captionss():
 
     x:string = final_output
 
+    print(len(x))
 
     #worked
     text = "The titular threat of The Blob has always struck me as the ultimate movie "
@@ -41,7 +91,9 @@ def get_better_captionss():
     blob = TextBlob(x)
 
     #worked
+    #return blob.words
     return blob.words
+    #return blob.correct
  
 # return text
 
