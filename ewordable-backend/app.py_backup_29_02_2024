@@ -1,4 +1,4 @@
-from flask import Flask,request,jsonify
+from flask import Flask, jsonify
 from youtube_transcript_api import YouTubeTranscriptApi as yta
 from textblob import TextBlob
 import numpy as np
@@ -7,54 +7,13 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import wordnet as wn
 import nltk
 import pandas as pd
-import os
-
 
 app = Flask(__name__)
-
-dataa = [{'name':'bartek'}]
 
 @app.route('/', methods = ['GET'])
 def get_articles():
  return jsonify({"Hello":"World"})
 
-
-
-@app.route('/video', methods=['GET', 'POST'])
-def video():
-    if request.method == "POST":
-        #value1 = request.form["value1"]
-        # value1 = request.json['value1']
-        #name = request.form["name"]
-        #name = request.json["name"]
-        data = json.loads(request.data)
-        #y = json.loads(data)
-        y = json.dumps(data)
-        x = json.loads(y)
-
-        l = """{"name":"bartek"}"""
-        ll = '{"name":"bartek"}'
-        m = json.dumps(ll)
-        n = json.loads(m)
-
-        print("value1", data['value1'])
-        print("y", y)
-        print("x", x)
-
-        print("m", m)
-        print("n", n)
-        #return data['value1']
-        #return data
-        #return y
-        
-        #return x
-        #return m #now returns
-        #return n
-        return jsonify(dataa)
-
-@app.route('/video_get', methods=['GET'])
-def video_get():
-    return jsonify(dataa)
 
 @app.route('/get_split_word', methods=['GET'])
 def get_split_word():
@@ -262,94 +221,12 @@ def get_every_word():
     #print(ini_string[0]["text"])
     dataStream = json.loads(ini_string)
     #print(dataStream)
-    print("dataStream", type(dataStream))
-    lenofdatastream = len(dataStream)
-    print("lenofdatastream", lenofdatastream)
     print(dataStream[0]["text"])
     sentence_one = dataStream[0]["text"]
     sentence_once_list = sentence_one.split()
     print(sentence_once_list)
     sentence_once_list_first_element = sentence_once_list[0]
     print("sentence_one_list_first_element",sentence_once_list_first_element)
-
-    #for i, text in range(data):
-    #    print(text[i])
-
-    #for text in dataStream:
-    #    value = dataStream[text]
-    #    print("print and valus are ({}) = ({})".format(key,value))
-
-    for i in range(len(dataStream)):
-        #print(dataStream[i]["text"])
-        sentence = (dataStream[i]["text"])
-        sentence_split_list = sentence.split()
-        print(sentence_split_list)
-        for j in range(len(sentence_split_list)):
-                print(sentence_split_list[j])
-                sentence_split_list_token = nltk.word_tokenize(sentence_split_list[j])
-                print(sentence_split_list_token)
-                postag = nltk.pos_tag(sentence_split_list_token)
-                print(postag)
-                postagini = json.dumps(postag)
-                print(postagini)
-                postagini_data = json.loads(postagini)
-                print("postagini_data",postagini_data)
-                for k in range(len(postagini_data)):
-                    print("postagini_data__",postagini_data[0][k])
-                    print("postagini_data_",postagini_data[0][1])
-                    word_to_write = postagini_data[0][k]
-                    file_name = postagini_data[0][1]
-                    dot = "."
-                    file_ext = "txt"
-                    filename = file_name + dot + file_ext
-                    print("filename", filename)
-                    print("word_to_write", word_to_write)
-                    ##with open(filename, "a+") as f:
-                       ## f.write("\n"+word_to_write)
-                       ## read i= f.readlines()
-                        #print("read", read)
-                        #for sentence in read:
-                        #    line = sentence.split()
-                        #    print("line", line)
-                       ## for r in read:
-                            
-                       ##     print("line", r)
-                       ## f.close()
-                    file = open(filename, "a+")
-                    
-                    #ok
-                    #file.seek(0)
-                    #
-
-                    file.seek(0)
-
-                    #read = file.seek(0)
-                    #for r in range(len(read)):
-                    #    print("read", r)
-                   
-                   #read = file.readlines()
-                    #read = file.readline()
-                    
-                    #for line in range(read):
-                    #    print(line.rstrip('\n'))
-                
-                    #ok
-                    #print("file_read", file.read())
-                    #
-
-                    print("fil_read", file.read())
-
-
-
-                    #for r in read:
-                    #    line = r.split()
-                    #    print("read_file",line)
-
-                    file.write(word_to_write)
-                    
-                    file.close() 
-
-
 
     first_element_token = nltk.word_tokenize(sentence_once_list_first_element)
     print("first_element_token",first_element_token)
@@ -364,38 +241,7 @@ def get_every_word():
     post_init_data = json.loads(postag_ini)
     print("post_init_data",post_init_data)
     print(post_init_data[0][1].lower())
-
-    postag_for_file = post_init_data[0][1].lower()
-    print("postag_for_file", postag_for_file)
-
-    file_name = postag_for_file
-    dot = "."
-    file_ext = "txt"
-    filename = file_name + dot + file_ext
-    print(filename)
-
-    #file = open(filename, "a")
     
-    #file = open("nn.txt", "a")
-    #phrase = "lkajsd"
-    #file.write("\n"+phrase)
-    #file.close()
-
-    phrase = "laksd"
-    with open("text2.txt", "a") as f:
-        #pass
-        f.write(phrase)
-
-
-    #try:
-    #    with open("nn.txt", 'w') as f:
-    #        f.write("Hello, World")
-    #except PermissionError:
-    #    print("Do not have permissions")
-    print(os.stat("/home/ubuntu/bartosz/projects/dev4passion_ewordable_backend/ewordable-backend"))
-
-
-
     #postagsplit = postag.split()
     #print("postag-split",postagsplit)
 

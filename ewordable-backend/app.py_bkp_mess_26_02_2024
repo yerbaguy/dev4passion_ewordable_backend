@@ -1,0 +1,368 @@
+from flask import Flask, jsonify
+from youtube_transcript_api import YouTubeTranscriptApi as yta
+from textblob import TextBlob
+import numpy as np
+import json
+from nltk.tokenize import word_tokenize
+from nltk.corpus import wordnet as wn
+import nltk
+
+app = Flask(__name__)
+
+@app.route('/', methods = ['GET'])
+def get_articles():
+ return jsonify({"Hello":"World"})
+
+
+@app.route('/get_split_word', methods=['GET'])
+def get_split_word():
+    vid_id = "As3TT3xlddU&t=558s"
+    data = yta.get_transcript(vid_id)
+    transcript = ''
+    test = []
+
+    for value in data:
+        for key, val in value.items():
+            if key == "text":
+                #print(val)
+              
+                #y = word_tokenize(val)
+                #print(val)
+              
+                #if len(val) > 0:
+                #    val = val[0]
+                #    test.append(val)
+                transcript += val
+                
+    outPut = transcript.splitlines()
+    final_output = ''.join(outPut)
+
+    y = word_tokenize(final_output)
+    #print(y)
+
+    #for i, x in y:
+    for x in y:
+        test.append(x)
+        #for key, val in x:
+           # if key in range(0,2):
+                #test.append(x)
+        #test.append(x)
+
+    print(type(test))
+
+    #json_object = json.loads(test)
+    json_object = json.dumps(test)
+    print(type(json_object))
+
+    #print(test)
+    #tests = json.loads(test)
+
+    jsonobj = json.loads(json_object)
+
+    #print(jsonobj)
+   
+    ##here
+    ##for element in range(0, len(jsonobj)):
+    ##    print(jsonobj[element][1:])
+   
+   #for element in range(0, len(jsonobj)):
+   #     test.append(element)
+   #     print(jsonobj[element:])
+
+   #visible on screen
+   #print("test",test)
+
+    for a in test:
+       # print(a)
+       
+        text = nltk.word_tokenize(a)
+        #jsonobject = json.dumps({'results': text})
+        jsonobject = json.dumps(text)
+        #print(type(jsonobject))
+        tags = []
+        jsonstring = json.loads(jsonobject)
+        print(jsonstring)
+        for tag in jsonstring:
+            tags.append(tag)
+        
+        for i in range(len(tags)):
+            #print(tags[i] + ':' + str(json[tags[i]]))
+            print(tags[i])
+
+        #print("jsonobject", jsonobject[0])
+        #print(text[0:1])
+        #result = nltk.pos_tag(text)
+        #print(result)
+        #result = [i for i in result if i[0].lower() == a]
+        #print(result[0:1])
+        #print(type(result))
+
+    for x in test:
+        found = False
+        answer = "No"
+     #   word = "generative"
+        word = "understand"
+        ########print(x[0:])
+     #   tmp = wn.synsets(x)[0].pos()
+     #   print(tmp)
+        if x == word:
+            #found = True
+            answer = "Yes" 
+            break
+    return answer
+
+
+
+   #for item in jsonobj:
+    #    print(item)
+
+    #for item in tests:
+    #    print(item)
+        
+
+
+    print(test)
+
+    #it just divides into single characters
+    #for i in final_output:
+    #    a = i.splitlines()
+    #    if len(a) > 0:
+    #        a = a[0]
+    #        test.append(a)
+   
+   ##    #a = i.split(',')
+    ##    a = i.strip()
+    ##    if len(a) > 0:
+    ##        a = a[0]
+    ##        test.append(a)
+        
+        
+    #print(test)
+
+    #######vertically writes words
+    #######y = final_output.strip()
+    #print(y)
+    
+    #######for y1 in y:
+    #######    print(y1i)
+        #if len(y1) > 0:
+        #    test.append(y1)
+
+    #print(test)
+
+    #y = final_output.split(',')
+    #print(y)
+
+    
+    
+
+    #for i,a in y:
+    #    return (a[i][0])
+
+
+    x:string = final_output
+
+    blob = TextBlob(x)
+
+    blobs = blob.parse().split()
+    
+    #print(blobs)
+
+    for blo in blobs:
+        return blo[0][0]
+        #return blo[100][0]
+        #return blo
+
+    #ok 
+    #for blo in blobs:
+    #    return blo[20][0]    
+
+    ######print(blobs[0:1][0])
+
+    #for blobb in blob.words:
+    #`    return blobb[1:2]
+
+    #####for blobb in blob.words:
+    ######    return (blobb[1:2])
+
+    #for blobb in blob.words:
+    #    for word in range(len(blob.words)):
+    #            return word
+
+    ####words = final_output.split()
+    ####print(words)
+    ####return words
+
+    #return final_output
+   # x:string = final_output
+
+
+   
+
+   #for i in range(len(x)):
+   #         return (x[i:2])
+
+@app.route('/get_every_word', methods=['GET'])
+def get_every_word():
+    vid_id = "As3TT3xlddU&t=558s"
+    data = yta.get_transcript(vid_id)
+    transcript = ''
+
+    for value in data:
+        for key, val in value.items():
+            if key == 'text':
+               transcript += val
+
+    outPut = transcript.splitlines()
+    final_output = ''.join(outPut)
+
+    x:string = final_output
+
+    #for i in range(len(x)):
+    #    return (x[i:2])
+
+    blob = TextBlob(x)
+
+   #for blobb in blob.words:
+   # for word in range(len(blob.words)):
+       # return blobb.polarity
+       # return (word[0:2])
+   # return blob.words
+    #return blob.words
+    blobs = blob.parse().split()
+   
+    return blobs
+     
+  #  print(blobs[16][0])
+    
+   ## for blo in blobs: ##here
+       # return blo[4]
+       
+       #correct
+       # return blo[94][0]
+       # return blo[94][0].lower()
+   
+
+     ## return blo[16][0].lower() ##here
+     
+       #this piece is ok
+         #wordprefix:string = blo[17][0].lower()
+         #wordprefix:string = "thevideo"
+         #print(wordprefix)
+         #afterwordprefix:string = removeprefix(wordprefix)
+         #return afterwordprefix
+       #this piece is ok
+    
+       #  return blo
+
+
+       # return blo
+
+       # for bl in blo:
+            #for b in bl:
+                #return b[0][0]
+            #return bl[0]
+            #return bl[0][2][3]
+
+
+
+
+
+@app.route('/get_better_captionss', methods = ['GET'])
+def get_better_captionss():
+    vid_id = "As3TT3xlddU&t=558s"
+    data = yta.get_transcript(vid_id)
+    transcript = ''
+
+    for value in data:
+        for key, val in value.items():
+            if key == 'text':
+               transcript += val
+
+    outPut = transcript.splitlines()
+    final_output = ''.join(outPut)
+
+   #print_type
+   # print(type(final_output))
+
+    x:string = final_output
+
+    print(len(x))
+
+    #worked
+    text = "The titular threat of The Blob has always struck me as the ultimate movie "
+    
+    #text = text.read()
+    #array_string = np.array(final_output)
+    #blob = TextBlob(array_string)
+
+    #worked
+    # blob = TextBlob(text)
+    blob = TextBlob(x)
+
+    #worked
+    #return blob.words
+    return blob.words
+    #return blob.correct
+ 
+# return text
+
+
+    #b = str("Machin Learnin")
+    #x = TextBlob(b)
+    #return x.correct()
+    
+    #return b.tags
+
+
+
+@app.route('/get_better_captions', methods = ['GET'])
+def get_better_captions():
+    vid_id = "As3TT3xlddU&t=558s"
+    data = yta.get_transcript(vid_id)
+    transcript = ''
+
+    for value in data:
+        for key, val in value.items():
+            if key == 'text':
+               transcript += val
+
+    outPut = transcript.splitlines()
+    final_output = ''.join(outPut)
+    #return final_output
+    x = str(final_output)
+    #return x
+
+   # b = TextBlob(final_output)
+   # return b.correct()
+    b = TextBlob(x)
+    #return b.correct()
+    return TextBlob("")
+    
+
+
+@app.route('/get_captions', methods = ['GET'])
+#@app.route('/get_captions'methods = ['GET'])
+def get_captions():
+    vid_id = "As3TT3xlddU&t=558s"
+    data = yta.get_transcript(vid_id)
+    transcript = ''
+
+    for value in data:
+        for key, val in value.items():
+            if key == 'text':
+               transcript += val
+
+    outPut = transcript.splitlines() 
+    final_output = ''.join(outPut)
+
+#print(final_output)
+
+    return final_output
+
+
+if __name__ == "__main__":
+
+  # app.run(debug=True)
+  # app.run(host='0.0.0.0', port=5000)
+  app.run(host='0.0.0.0', port=5000)

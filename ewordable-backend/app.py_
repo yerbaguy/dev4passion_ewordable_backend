@@ -1,0 +1,31 @@
+from flask import Flask, jsonify
+from youtube_transcript_api import YouTubeTranscriptApi as yta
+from textblob import TextBlob
+import numpy as np
+import json
+from nltk.tokenize import word_tokenize
+from nltk.corpus import wordnet as wn
+import nltk
+
+app = Flask(__name__)
+
+@app.route('/', methods=['GET'])
+def getMain():
+    return jsonify({"Hello":"World"})
+
+@app.route('/get_split_word', methods=['GET'])
+def get_split_word():
+    vid_id = "As3TT3xlddU&t=558s"
+    data = yta.get_transcript(vid_id)
+    transcript = ''
+
+    for value in data:
+        #print(value)
+        for key, val in value.items():
+            if key == "text":
+                print(val)
+        return value
+
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
