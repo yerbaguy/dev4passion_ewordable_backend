@@ -307,6 +307,18 @@ def get_every_word():
                     filename = file_name + dot + file_ext
                     print("filename", filename)
                     print("word_to_write", word_to_write)
+
+                    with open(filename, 'r+') as f:
+                        f.read()
+                        f.write("new new \n")
+
+                    with open(filename, 'r') as file:
+                        lines = []
+
+                        for line in file:
+                            line = line.strip()
+                            lines.append(line)
+                    print("lines lines", lines)
                     ##with open(filename, "a+") as f:
                        ## f.write("\n"+word_to_write)
                        ## read i= f.readlines()
@@ -318,11 +330,19 @@ def get_every_word():
                             
                        ##     print("line", r)
                        ## f.close()
-                    
+                   
+
+                
+
 
                     file = open(filename, "a+")
-                    print("file", file.read())
+                    
+                    #######print("file", file.read())
                    
+
+                    lines = file.readlines()
+                    for line in lines:
+                        print("line line", line)
 
                    #####for line in file:
                    #####     print("line", line.rstrip('\n'))
@@ -341,7 +361,7 @@ def get_every_word():
                     #file.seek(0)
                     #
 
-                    file.seek(0)
+                    ######file.seek(0)
 
                     #read = file.seek(0)
                     #for r in range(len(read)):
@@ -357,7 +377,7 @@ def get_every_word():
                     #print("file_read", file.read())
                     #
 
-                    print("fil_read", file.read())
+                    #######print("fil_read", file.read())
 
 
                     #####if word_to_write in filename:
