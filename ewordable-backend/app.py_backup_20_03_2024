@@ -269,9 +269,8 @@ def get_every_word():
     print("lenofdatastream", lenofdatastream)
     print(dataStream[0]["text"])
     sentence_one = dataStream[0]["text"]
-    print("sentence_one", sentence_one)
     sentence_once_list = sentence_one.split()
-    print("sentence_once_list", sentence_once_list)
+    print(sentence_once_list)
     sentence_once_list_first_element = sentence_once_list[0]
     print("sentence_one_list_first_element",sentence_once_list_first_element)
 
@@ -286,15 +285,15 @@ def get_every_word():
         #print(dataStream[i]["text"])
         sentence = (dataStream[i]["text"])
         sentence_split_list = sentence.split()
-        print("sentence_split_list_loop", sentence_split_list)
+        print(sentence_split_list)
         for j in range(len(sentence_split_list)):
-                print("sentence_split_list[j]",sentence_split_list[j])
+                print(sentence_split_list[j])
                 sentence_split_list_token = nltk.word_tokenize(sentence_split_list[j])
-                print("sentence_split_list_token",sentence_split_list_token)
+                print(sentence_split_list_token)
                 postag = nltk.pos_tag(sentence_split_list_token)
-                print("postag", postag)
+                print(postag)
                 postagini = json.dumps(postag)
-                print("postagini", postagini)
+                print(postagini)
                 postagini_data = json.loads(postagini)
                 print("postagini_data",postagini_data)
                 for k in range(len(postagini_data)):
@@ -318,25 +317,8 @@ def get_every_word():
                             
                        ##     print("line", r)
                        ## f.close()
-                    
-
                     file = open(filename, "a+")
-                    print("file", file.read())
-                   
-
-                   #####for line in file:
-                   #####     print("line", line.rstrip('\n'))
-                    #####for item in file:
-                    #####    print("item", item)
-                   
-
-                           #####if not word_to_write in item:
-
-                            #####print("there is no such a word")
-                        #####else:
-                            #####print("there is such a word")
-                        #print("item", item)
-
+                    
                     #ok
                     #file.seek(0)
                     #
@@ -360,26 +342,12 @@ def get_every_word():
                     print("fil_read", file.read())
 
 
-                    #####if word_to_write in filename:
-                        #####print("there is such a word")
-                    #####else:
-                        #####print("there isn't such a word")
-
-                    #this part
-                    ##if not word_to_write in file.read():
-                    ##    print("not word_to_write in file.read()")
-                        #file.write(word_to_write)
-                    ##else:
-                    ##    return
-                    #this part
-
 
                     #for r in read:
                     #    line = r.split()
                     #    print("read_file",line)
 
-                    file.write(word_to_write+"\n")
-                    #file.write(word_to_write)
+                    file.write(word_to_write)
                     
                     file.close() 
 
