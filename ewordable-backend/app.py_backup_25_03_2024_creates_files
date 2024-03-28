@@ -302,46 +302,12 @@ def get_every_word():
                     print("postagini_data_",postagini_data[0][1])
                     word_to_write = postagini_data[0][k]
                     file_name = postagini_data[0][1]
-                    array_name = postagini_data[0][1]
                     dot = "."
                     file_ext = "txt"
                     filename = file_name + dot + file_ext
                     print("filename", filename)
                     print("word_to_write", word_to_write)
                     
-                    #arrayname = array_name
-
-                    arrayname = []
-                    
-                    size = 3
-                    memory = []
-
-
-
-
-
-                    ##for a in array_name:
-                    ##    arrayname.append(a)
-
-                      ##  print("arrayname", arrayname[0][0])
-
-
-
-                    #for arrayname in array_nam:
-                    #    print("array_name", array
-
-                    #####for i in range(len(array_name)):
-                        #####arrayname.append(arrayname)
-
-                        #####for array in arrayname:
-                            #print("array", array[i][0])
-                            #####print("array", array[0][0])
-
-
-
-
-
-
                     #search_string = 'new new'
                     search_string = word_to_write
 
@@ -386,41 +352,76 @@ def get_every_word():
                    
 
                 
-                    ##outfile = open(filename, "w")
-                    ##for line in open(filename, "r"):
-                    ##    if word_to_write not in line:
-                    ##        outfile.write(word_to_write)
-                    ##outfile.close()
-
-                    #out = open(filename, "w")
-                    #file = open(filename, "r")
-                    #file_content = file.readline()
-                    #if word_to_write in file_content:
-                    #    print("Yes")
-                    #else:
-                    #    print("No")
-
-                    with open(filename, "r") as f:
-                        lines = dict.fromkeys(f.readlines())
-                    with open(filename, "w") as f:
-                        f.writelines(lines)
 
 
-                    #here
                     file = open(filename, "a+")
                     
-                    print("file", file.read())
+                    #######print("file", file.read())
                    
 
                     lines = file.readlines()
                     for line in lines:
                         print("line line", line)
 
+                   #####for line in file:
+                   #####     print("line", line.rstrip('\n'))
+                    #####for item in file:
+                    #####    print("item", item)
+                   
+
+                           #####if not word_to_write in item:
+
+                            #####print("there is no such a word")
+                        #####else:
+                            #####print("there is such a word")
+                        #print("item", item)
+
+                    #ok
+                    #file.seek(0)
+                    #
+
+                    ######file.seek(0)
+
+                    #read = file.seek(0)
+                    #for r in range(len(read)):
+                    #    print("read", r)
+                   
+                   #read = file.readlines()
+                    #read = file.readline()
+                    
+                    #for line in range(read):
+                    #    print(line.rstrip('\n'))
+                
+                    #ok
+                    #print("file_read", file.read())
+                    #
+
+                    #######print("fil_read", file.read())
+
+
+                    #####if word_to_write in filename:
+                        #####print("there is such a word")
+                    #####else:
+                        #####print("there isn't such a word")
+
+                    #this part
+                    ##if not word_to_write in file.read():
+                    ##    print("not word_to_write in file.read()")
+                        #file.write(word_to_write)
+                    ##else:
+                    ##    return
+                    #this part
+
+
+                    #for r in read:
+                    #    line = r.split()
+                    #    print("read_file",line)
 
                     file.write(word_to_write+"\n")
+                    #file.write(word_to_write)
                     
                     file.close() 
-                    #here
+
 
 
     first_element_token = nltk.word_tokenize(sentence_once_list_first_element)
