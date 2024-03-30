@@ -1,7 +1,0 @@
-Layman
-NNP
-Microsoft
-Google
-Facebook
-Advanced
-Advanced

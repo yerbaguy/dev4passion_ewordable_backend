@@ -7,8 +7,14 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import wordnet as wn
 import nltk
 import pandas as pd
+import io
 import os
+import unicodedata
+import string
+import glob
+import random
 
+ALL_LETTERS = string.ascii_letters + ".,;'"
 
 app = Flask(__name__)
 
@@ -249,6 +255,49 @@ def get_split_word():
    #for i in range(len(x)):
    #         return (x[i:2])
 
+
+def unicode_to_ascii(s):
+    return ''.join(
+            c for c in unicodedata.normalize('NFD', s)
+            if unicodedata.category(c) != 'Mn'
+            and c in ALL_LETTERS
+            )
+
+
+def load_data():
+    print("load_data")
+
+    words_lines = {}
+    all_words = []
+
+
+    def find_files(path):
+        return glob.glob(path)
+
+    def read_lines(filename):
+        lines = io.open(filename, encoding='utf-8').read().strip().split('\n')
+        return [unicode_to_ascii(line) for line in lines]
+
+    for filename in find_files('words.txt'):
+        words = os.path.splitext(os.path.basename(filename))[0]
+        all_words.append(words)
+
+        lines = read_lines(filename)
+        words_lines[words] = lines
+
+    return words_lines, all_words
+
+def random_word(words_lines, all_words):
+
+    def random_choice(a):
+        random_idx = random.randint(0, len(a) - 1)
+        return a[random_idx]
+
+    word = random_choice(all_words)
+    line = random_choice(words_lines[word])
+    
+    return word, line
+
 @app.route('/get_every_word', methods=['GET'])
 def get_every_word():
     vid_id = "As3TT3xlddU&t=558s"
@@ -305,7 +354,8 @@ def get_every_word():
                     array_name = postagini_data[0][1]
                     dot = "."
                     file_ext = "txt"
-                    filename = file_name + dot + file_ext
+                    #filename = file_name + dot + file_ext
+                    filename = "words" + dot + file_ext
                     print("filename", filename)
                     print("word_to_write", word_to_write)
                     
@@ -400,11 +450,13 @@ def get_every_word():
                     #else:
                     #    print("No")
 
+                   
+                    #removes the duplicates
                     with open(filename, "r") as f:
                         lines = dict.fromkeys(f.readlines())
                     with open(filename, "w") as f:
                         f.writelines(lines)
-
+                    #
 
                     #here
                     file = open(filename, "a+")
@@ -417,7 +469,8 @@ def get_every_word():
                         print("line line", line)
 
 
-                    file.write(word_to_write+"\n")
+                    #file.write(word_to_write+"\n")
+                    file.write(f"{word_to_write},{file_name}\n")
                     
                     file.close() 
                     #here
@@ -710,6 +763,14 @@ def get_captions():
 
 
 if __name__ == "__main__":
+
+  words_lines, all_words = load_data()
+  word, line = random_word(words_lines, all_words)
+  print("words_lines", words_lines)
+  print("all_words", all_words)
+
+  print("word", word)
+  print("lin", line)
 
   # app.run(debug=True)
   # app.run(host='0.0.0.0', port=5000)
