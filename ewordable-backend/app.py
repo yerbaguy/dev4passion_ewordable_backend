@@ -13,6 +13,12 @@ import unicodedata
 import string
 import glob
 import random
+import requests
+
+
+app_id = "c6e4e155"
+app_key = "8e66c4be8437dbbd71d0c69465e22e9d"
+
 
 ALL_LETTERS = string.ascii_letters + ".,;'"
 
@@ -287,6 +293,104 @@ def load_data():
 
     return words_lines, all_words
 
+
+def get_a_word_from_oxford(line):
+   
+    app_id = "c6e4e155"
+    app_key = "8e66c4be8437dbbd71d0c69465e22e9d"
+
+    print("line line", line)
+    #line_dumps = json.dumps(line)
+    #print("line_dumps", line_dumps)
+    #line_dumps_split = line_dumps.split()
+    #print("line_dumps_split", line_dumps_split)
+
+    #for line in line_dumps:
+    #    print("word", line[0])
+
+    #line_loads = json.loads(line_dumps)
+    #print("line_loads", line_loads[0]["word"])
+    #line_loads_split = line_loads.split()
+    #print("line_loads_split", line_loads_split)
+
+    ####linee = json.dumps(line)
+    ####linee_json_loads = json.loads(linee)
+    ####print("linee_loads", linee_json_loads)
+    ####print("linee_loads", linee_json_loads[0][0])
+    ####print("linee", linee)
+
+
+
+    ##print("line --", linee)
+    #print("line --", linee[0][0])
+    ##line_ini = json.loads(linee)
+    ##print("line_inie", line_ini)
+    ##print("line_inie", line_ini[0]["words"])
+
+
+    language = 'en-gb'
+    #word_id = 'Ace'
+    #word_id = word
+    word_id = line
+    fields = 'pronunciations'
+    strictMatch = 'false'
+
+    #
+
+    #url = "https://od-api.oxforddictionaries.com/api/v2/" + endpoint + "/" + language_code + "/" + word_id.lower()
+    #r = requests.get(url, headers = {"app_id": app_id, "app_key": app_key})
+
+    #url = 'https://od-api.oxforddictionaries.com:443/api/v2/entries/' + language + '/' + word_id.lower() + '?fields=' + fields + '&strictMatch=' + strictMatch;
+    #r = requests.get(url, headers = {'app_id': app_id, 'app_key': app_key})
+
+    #url = 'https://api.dictionaryapi.dev/api/v2/entries/en/hello';
+    url = 'https://api.dictionaryapi.dev/api/v2/entries/en/'+word_id.lower();
+    r = requests.get(url)
+
+
+    print("code {}\n".format(r.status_code))
+    print("text \n" + r.text)
+    print("json dumps \n" + json.dumps(r.json()))
+    ini_string = json.dumps(r.json())
+    dataStream = json.loads(ini_string)
+    print("json loads dataStream", dataStream)
+    print("-- word",dataStream[0]["word"])
+    print("-- meanings",dataStream[0]["meanings"])
+    dataStream_definitions = dataStream[0]["meanings"]
+    print("-- definitions", dataStream_definitions)
+    print("-- meanings --",dataStream[0]["meanings"][0])  
+
+    dataStream_meanings_partOfSpeech = dataStream[0]["meanings"][0]["partOfSpeech"]
+    print("-- dataStream_meanings_partOfSpeech", dataStream_meanings_partOfSpeech)
+
+    dataStream_meanings_definition = dataStream[0]["meanings"][0]["definitions"]
+    print("-- dataStream_meanings_definition", dataStream_meanings_definition[0]["definition"])
+    print("-- dataStream_meanings_definition_example", dataStream_meanings_definition[0]["example"])
+
+
+    definitions = dataStream[0]["meanings"][0]
+    print("-- d", definitions)
+    print("-- phonetics",dataStream[0]["phonetics"])
+    dataStream_phonetics = dataStream[0]["phonetics"]
+    print("-- dataStream_phonetics", dataStream_phonetics[0]["text"])
+    #dataStream_partOfSpeech = dataStream[0]["partOfSpeech"]
+    #print("-- dataStream_partOfSpeech", dataStream_partOfSpeech)
+
+
+
+    #dataStream_definitions = dataStream[0]["definitions"]
+    #print("-- dataStream_definitions", dataStream_definitions)
+    #definitions = dataStream[0]["definition"]
+    #print("--", definitions)
+    
+    #print("json \n" + json.dumps(r.json()))
+
+
+   #print("r.definition", r[0]["definition"])
+
+    return r
+
+
 def random_word(words_lines, all_words):
 
     def random_choice(a):
@@ -297,6 +401,9 @@ def random_word(words_lines, all_words):
     line = random_choice(words_lines[word])
     
     return word, line
+
+
+
 
 @app.route('/get_every_word', methods=['GET'])
 def get_every_word():
@@ -470,7 +577,8 @@ def get_every_word():
 
 
                     #file.write(word_to_write+"\n")
-                    file.write(f"{word_to_write},{file_name}\n")
+                    #file.write(f"{word_to_write},{file_name}\n")
+                    file.write(f"{word_to_write}\n")
                     
                     file.close() 
                     #here
@@ -770,7 +878,8 @@ if __name__ == "__main__":
   print("all_words", all_words)
 
   print("word", word)
-  print("lin", line)
+  print("line", line)
+  get_a_word_from_oxford(line)
 
   # app.run(debug=True)
   # app.run(host='0.0.0.0', port=5000)
