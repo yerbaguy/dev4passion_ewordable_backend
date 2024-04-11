@@ -1,0 +1,30 @@
+from flask import Flask, request, jsonify
+#from youtube_transcript_api import YouTubeTranscriptApi as yta
+from youtube_transcript_api import YouTubeTranscriptApi
+from textblob import TextBlob
+import numpy as np
+import json
+from nltk.tokenize import word_tokenize
+from nltk.corpus import wordnet as wn
+import nltk
+import pandas as pd
+import io
+import os
+import unicodedata
+import string
+import glob
+import random
+#import requests
+
+
+
+app = Flask(__name__)
+
+
+@app.route("/")
+def Home():
+    return "Home"
+
+if __name__ == "__main__":
+   # app.run(debug=True)
+   app.run(host='0.0.0.0', port=5000)

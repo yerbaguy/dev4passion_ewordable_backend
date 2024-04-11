@@ -14,7 +14,16 @@ import string
 import glob
 import random
 import requests
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
 
+cred = credentials.Certificate('ewords-4e4f8-firebase-adminsdk-u8kct-3bc2f120d8.json')
+firebase_admin.initialize_app(cred)
+
+db = firestore.client()
+
+random_word = []
 
 app_id = "c6e4e155"
 app_key = "8e66c4be8437dbbd71d0c69465e22e9d"
@@ -294,8 +303,54 @@ def load_data():
     return words_lines, all_words
 
 
+
+def get_a_word_from_firebase():
+
+    docs = (
+        db.collection("Words")
+        .stream()
+        )
+
+    documents_list = []
+
+    for doc in docs:
+        doc_data = doc.to_dict()
+        documents_list.append(doc_data)
+
+    print("doc_data_len", len(documents_list))
+
+    doc_data_len = len(documents_list)
+
+
+    #random_word = rand_word(20)
+    random_word = rand_word(doc_data_len)
+    print("random_word", random_word)
+
+    print("doc_data_word ----", documents_list[random_word]["word"])  
+    print("doc_data_definition", documents_list[random_word]["definition"]["definitions"][0]["definition"])
+    print("doc_data_definition_example", documents_list[random_word]["definition"]["definitions"][0]["example"])
+    print("doc_data_phonetics", documents_list[random_word]["phonetics"][0]["text"])
+    print("doc_data_partOfSpeech", documents_list[random_word]["definition"]["partOfSpeech"])
+
+    random_wordd = documents_list[random_word]["word"]
+    definition = documents_list[random_word]["definition"]["definitions"][0]["definition"]
+    defintion_example = documents_list[random_word]["definition"]["definitions"][0]["example"]
+    phonetics = documents_list[random_word]["phonetics"][0]["text"]
+    partOfSpeech =  documents_list[random_word]["definition"]["partOfSpeech"]
+
+
+    #return random_idx
+    return random_wordd, definition, defintion_example, phonetics, partOfSpeech
+
+
 def get_a_word_from_oxford(line):
-   
+
+    partOfSpeech = ""
+    definition = ""
+    example = ""
+    word = ""
+    phonetics = ""
+
     app_id = "c6e4e155"
     app_key = "8e66c4be8437dbbd71d0c69465e22e9d"
 
@@ -355,6 +410,8 @@ def get_a_word_from_oxford(line):
     dataStream = json.loads(ini_string)
     print("json loads dataStream", dataStream)
     print("-- word",dataStream[0]["word"])
+    word = dataStream[0]["word"]
+    print("wordd", word)
     print("-- meanings",dataStream[0]["meanings"])
     dataStream_definitions = dataStream[0]["meanings"]
     print("-- definitions", dataStream_definitions)
@@ -366,16 +423,39 @@ def get_a_word_from_oxford(line):
     dataStream_meanings_definition = dataStream[0]["meanings"][0]["definitions"]
     print("-- dataStream_meanings_definition", dataStream_meanings_definition[0]["definition"])
     print("-- dataStream_meanings_definition_example", dataStream_meanings_definition[0]["example"])
-
+    example = dataStream_meanings_definition[0]["example"]
 
     definitions = dataStream[0]["meanings"][0]
     print("-- d", definitions)
+    definition = definitions
+    print("definitionn", definition)
     print("-- phonetics",dataStream[0]["phonetics"])
     dataStream_phonetics = dataStream[0]["phonetics"]
     print("-- dataStream_phonetics", dataStream_phonetics[0]["text"])
+    phonetics = dataStream_phonetics
+    print("phoneticss", phonetics)
     #dataStream_partOfSpeech = dataStream[0]["partOfSpeech"]
     #print("-- dataStream_partOfSpeech", dataStream_partOfSpeech)
 
+
+    #data = [partOfSpeech, definition, example, word, phonetics]
+    data = {
+            "partOfSpeech":partOfSpeech,
+            "definition":definition,
+            "example":example,
+            "word":word,
+            "phonetics":phonetics
+            }
+
+   # db.collection("Words").document("Word").set(data, merge=True )
+    db.collection("Words").add(data)
+   #word_ref.set( merge = True )
+
+   # db.collection("Words").document("Word").add(data)
+
+    #for record in data:
+    #    doc_ref = db.collection(u'Words').document(record['wordd'])
+    #    doc.ref.set(record)
 
 
     #dataStream_definitions = dataStream[0]["definitions"]
@@ -391,16 +471,34 @@ def get_a_word_from_oxford(line):
     return r
 
 
+
+
+
+def rand_word(a):
+    #random_word = random.randint(0, len(a) - 1)
+    random_word = random.randint(0, a - 1)
+    return random_word
+
+
+
 def random_word(words_lines, all_words):
 
     def random_choice(a):
         random_idx = random.randint(0, len(a) - 1)
+        #x = 2
+        #random_word.append(x)
+        print("random_idx", random_idx)
+        #get_a_word_from_firebase(random_idx)
         return a[random_idx]
+        #return a[random_idx], random_idx
 
     word = random_choice(all_words)
     line = random_choice(words_lines[word])
-    
+    #random_number = random_idx
+
+
     return word, line
+    #return word, line, random_number
 
 
 
@@ -872,14 +970,25 @@ def get_captions():
 
 if __name__ == "__main__":
 
+  random_idx = 1
   words_lines, all_words = load_data()
-  word, line = random_word(words_lines, all_words)
+  #word, line, random_number = random_word(words_lines, all_words)
+  
+  word, line  = random_word(words_lines, all_words)
   print("words_lines", words_lines)
   print("all_words", all_words)
+  #print("random_number", random_number)
 
   print("word", word)
   print("line", line)
   get_a_word_from_oxford(line)
+  random_value  = get_a_word_from_firebase()  
+  
+  print("random_word", random_value)
+
+  random_word = rand_word(20)
+  print("random_word", random_word)
+
 
   # app.run(debug=True)
   # app.run(host='0.0.0.0', port=5000)
